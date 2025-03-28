@@ -44,28 +44,28 @@
             <table class="table table-hover table-bordered text-center">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Tanggal</th>
-                        <th>Penjualan</th>
+                        <th>Order Number</th>
+                        <th>Order Date</th>
+                        <th>Customer Name</th>
+                        <th>Country</th>
+                        <th>Sales</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($salesData as $data)
                         <tr>
-                            <td>{{ $data->id }}</td>
-                            <td>{{ $data->date }}</td>
-                            <td>Rp {{ number_format($data->sales, 2, ',', '.') }}</td>
+                            <td>{{ $data->ORDERNUMBER }}</td>
+                            <td>{{ $data->ORDERDATE }}</td>
+                            <td>{{ $data->CUSTOMERNAME }}</td>
+                            <td>{{ $data->COUNTRY }}</td>
+                            <td>Rp {{ number_format($data->SALES, 2, ',', '.') }}</td>
                             <td>
-                                <a href="{{ route('sales_data.show', $data->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ route('sales_data.edit', $data->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <form action="{{ route('sales_data.destroy', $data->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
+                                <a href="{{ route('sales_data.show', ['id' => $data->ORDERNUMBER]) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ route('sales_data.edit', ['id' => $data->ORDERNUMBER]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{{ route('sales_data.destroy', ['id' => $data->ORDERNUMBER]) }}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <i class="fa fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

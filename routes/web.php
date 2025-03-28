@@ -14,8 +14,10 @@ use App\Http\Controllers\SalesDataController;
 |
 */
 
-Route::get('/', [SalesDataController::class, 'index']);
-
-Route::resource('sales_data', SalesDataController::class);
-
-Route::resource('sales_data', SalesDataController::class);
+Route::get('/', [SalesDataController::class, 'index'])->name('sales_data.index');
+Route::get('/sales_data/create', [SalesDataController::class, 'create'])->name('sales_data.create');
+Route::post('/sales_data', [SalesDataController::class, 'store'])->name('sales_data.store');
+Route::get('/sales_data/show', [SalesDataController::class, 'show'])->name('sales_data.show');
+Route::get('/sales_data/edit', [SalesDataController::class, 'edit'])->name('sales_data.edit');
+Route::post('/sales_data/update', [SalesDataController::class, 'update'])->name('sales_data.update');
+Route::get('/sales_data/destroy', [SalesDataController::class, 'destroy'])->name('sales_data.destroy');

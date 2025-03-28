@@ -12,8 +12,8 @@ class SalesDataController extends Controller
      */
     public function index()
     {
-        $salesData = SalesData::all(); // Ambil semua data penjualan
-        return view('sales_data.index', compact('salesData')); // Kirim data ke view
+        $salesData = SalesData::all();
+        return view('sales_data.index', compact('salesData'));
     }
 
     /**
@@ -21,7 +21,7 @@ class SalesDataController extends Controller
      */
     public function create()
     {
-        return view('sales_data.create'); // Tampilkan form untuk membuat data baru
+        return view('sales_data.create');
     }
 
     /**
@@ -30,11 +30,11 @@ class SalesDataController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'date' => 'required|date',
-            'sales' => 'required|numeric',
+            'ORDERNUMBER' => 'required|numeric|unique:sales_data', // Contoh validasi
+            // tambahkan validasi lain sesuai kebutuhan
         ]);
 
-        SalesData::create($request->all()); // Simpan data baru ke database
+        SalesData::create($request->all());
         return redirect()->route('sales_data.index')
                          ->with('success', 'Data penjualan berhasil ditambahkan.');
     }
@@ -42,33 +42,73 @@ class SalesDataController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SalesData $salesDatum)
+    public function show(Request $request)
     {
-        return view('sales_data.show', compact('salesDatum'));
+        $orderNumber = $request->query('id'); // Ambil ID dari $_GET
+
+        $salesData = SalesData::where('ORDERNUMBER', $orderNumber)->first(); // Query database
+
+        if (!$salesData) {
+            abort(404);
+        }
+
+        return view('sales_data.show', compact('salesData'));
     }
 
-    public function edit(SalesData $salesData)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request)
     {
+        $orderNumber = $request->query('id'); // Ambil ID dari $_GET
+
+        $salesData = SalesData::where('ORDERNUMBER', $orderNumber)->first(); // Query database
+
+        if (!$salesData) {
+            abort(404);
+        }
+
         return view('sales_data.edit', compact('salesData'));
     }
 
-    public function update(Request $request, SalesData $salesData)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
     {
+        $orderNumber = $request->query('id'); // Ambil ID dari $_GET
+
+        $salesData = SalesData::where('ORDERNUMBER', $orderNumber)->first(); // Query database
+
+        if (!$salesData) {
+            abort(404);
+        }
+
         $request->validate([
-            'date' => 'required|date',
-            'sales' => 'required|numeric',
+            'ORDERNUMBER' => 'required|numeric|unique:sales_data,ORDERNUMBER,'.$salesData->ORDERNUMBER, // Contoh validasi
+            // tambahkan validasi lain sesuai kebutuhan
         ]);
 
         $salesData->update($request->all());
-
-        return redirect()->route('sales_data.index')->with('success', 'Data berhasil diperbarui');
+        return redirect()->route('sales_data.index')
+                         ->with('success', 'Data penjualan berhasil diperbarui.');
     }
 
-
-    public function destroy(SalesData $salesDatum)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request)
     {
-        $salesDatum->delete();
+         $orderNumber = $request->query('id'); // Ambil ID dari $_GET
+
+        $salesData = SalesData::where('ORDERNUMBER', $orderNumber)->first(); // Query database
+
+        if (!$salesData) {
+            abort(404);
+        }
+
+        $salesData->delete();
         return redirect()->route('sales_data.index')
-                        ->with('success', 'Data penjualan berhasil dihapus.');
+                         ->with('success', 'Data penjualan berhasil dihapus.');
     }
 }
